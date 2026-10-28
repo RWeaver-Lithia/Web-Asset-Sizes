@@ -1,0 +1,10 @@
+name = "web-asset-sizes"
+compatibility_date = "2026-10-28"
+
+[assets]
+directory = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "web-asset-sizes-db"
+database_id = "47f41034-9054-4032-8d36-5d35ba651fae"

@@ -1,11 +1,168 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My Cloudflare App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f5f2">
+    <meta name="description" content="Search digital marketing asset dimensions by brand, provider, and placement.">
+    <title>Asset Specs | Digital Operations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
 </head>
 <body>
-    <h1>Hello from Cloudflare Pages!</h1>
-    <p>My app is live and connected via GitHub.</p>
+    <header class="topbar">
+        <a class="wordmark" href="/" aria-label="Asset Specs home">
+            <span class="wordmark-mark">AS</span>
+            <span class="wordmark-name">DIGITAL OPERATIONS</span>
+        </a>
+        <div class="topbar-meta">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>INTERNAL LIBRARY</span>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="page-intro" aria-labelledby="page-title">
+            <div>
+                <p class="eyebrow">WEB ASSET REFERENCE <span>/</span> 01</p>
+                <h1 id="page-title">Asset specifications</h1>
+                <p class="intro-copy">The right dimensions for every brand, provider, and placement.</p>
+            </div>
+            <div class="intro-side" aria-label="Catalog summary">
+                <span class="summary-value" id="total-specs">--</span>
+                <span class="summary-label">SPECIFICATIONS</span>
+                <button class="primary-button" id="add-spec" type="button" hidden>Add specification</button>
+            </div>
+        </section>
+
+        <section class="catalog-panel" aria-label="Search asset specifications">
+            <div class="search-row">
+                <label class="search-field">
+                    <span class="search-label">SEARCH THE LIBRARY</span>
+                    <input id="search" type="search" placeholder="Brand, store, provider, placement, or size" autocomplete="off">
+                    <kbd>/</kbd>
+                </label>
+                <button class="clear-button" id="clear-filters" type="button">Clear filters</button>
+            </div>
+
+            <div class="filter-grid">
+                <label class="filter-field">
+                    <span>BRAND</span>
+                    <select id="brand-filter"><option value="">All brands</option></select>
+                </label>
+                <label class="filter-field">
+                    <span>WEBSITE PROVIDER</span>
+                    <select id="provider-filter"><option value="">All providers</option></select>
+                </label>
+                <label class="filter-field">
+                    <span>ASSET TYPE</span>
+                    <select id="asset-filter"><option value="">All placements</option></select>
+                </label>
+                <label class="filter-field">
+                    <span>DEVICE</span>
+                    <select id="device-filter">
+                        <option value="">All devices</option>
+                        <option value="desktop">Desktop</option>
+                        <option value="mobile">Mobile</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="results-toolbar">
+                <div class="scope-switch" role="group" aria-label="Specification scope">
+                    <button class="scope-button is-active" type="button" data-scope="all" aria-pressed="true">All specs</button>
+                    <button class="scope-button" type="button" data-scope="standard" aria-pressed="false">Brand standards</button>
+                    <button class="scope-button" type="button" data-scope="store" aria-pressed="false">Store-specific</button>
+                </div>
+                <p class="result-count" id="result-count" aria-live="polite">Loading specifications...</p>
+            </div>
+        </section>
+
+        <section class="results-section" aria-label="Matching specifications">
+            <div class="results-head" aria-hidden="true">
+                <span>BRAND</span>
+                <span>PLACEMENT</span>
+                <span>DIMENSIONS</span>
+                <span>PROVIDER</span>
+                <span>APPLIES TO</span>
+            </div>
+            <div id="results" class="results-list" aria-live="polite" aria-busy="true">
+                <div class="empty-state">Loading the asset library...</div>
+            </div>
+            <button id="load-more" class="load-more" type="button" hidden>Load more results</button>
+        </section>
+
+        <dialog id="spec-dialog" class="spec-dialog" aria-labelledby="dialog-title">
+            <form id="spec-form">
+                <div class="dialog-heading">
+                    <div>
+                        <p class="eyebrow">CATALOG ADMINISTRATION</p>
+                        <h2 id="dialog-title">Add specification</h2>
+                    </div>
+                    <button class="dialog-close" id="close-dialog" type="button" aria-label="Close">×</button>
+                </div>
+                <input name="id" type="hidden">
+                <div class="dialog-grid">
+                    <label class="dialog-field">
+                        <span>SCOPE</span>
+                        <select name="recordType" id="form-record-type" required>
+                            <option value="store">Store-specific</option>
+                            <option value="standard">Brand/provider standard</option>
+                        </select>
+                    </label>
+                    <label class="dialog-field">
+                        <span>WEBSITE PROVIDER</span>
+                        <input name="provider" required maxlength="120">
+                    </label>
+                    <label class="dialog-field">
+                        <span>BRAND NAME</span>
+                        <input name="brand" required maxlength="120">
+                    </label>
+                    <label class="dialog-field">
+                        <span>BRAND CODE</span>
+                        <input name="brandCode" required maxlength="40">
+                    </label>
+                    <label class="dialog-field store-field">
+                        <span>STORE NAME</span>
+                        <input name="store" maxlength="180">
+                    </label>
+                    <label class="dialog-field store-field">
+                        <span>STORE CODE</span>
+                        <input name="storeCode" maxlength="60">
+                    </label>
+                    <label class="dialog-field store-field">
+                        <span>STATE</span>
+                        <input name="state" maxlength="40">
+                    </label>
+                    <label class="dialog-field">
+                        <span>ASSET TYPE</span>
+                        <input name="assetType" list="asset-type-options" required maxlength="120">
+                        <datalist id="asset-type-options"></datalist>
+                    </label>
+                    <label class="dialog-field">
+                        <span>DIMENSIONS / REQUIREMENT</span>
+                        <input name="size" required maxlength="2000" placeholder="e.g. 1920x500 or N/A">
+                    </label>
+                    <label class="dialog-field dialog-field-wide">
+                        <span>NOTES</span>
+                        <textarea name="notes" rows="3" maxlength="2000"></textarea>
+                    </label>
+                </div>
+                <p class="form-error" id="form-error" role="alert" hidden></p>
+                <div class="dialog-actions">
+                    <button class="secondary-button" id="cancel-dialog" type="button">Cancel</button>
+                    <button class="primary-button" type="submit">Save specification</button>
+                </div>
+            </form>
+        </dialog>
+
+        <footer class="page-footer">
+            <span>INTERNAL REFERENCE <span class="footer-divider">/</span> VERIFY PROVIDER REQUIREMENTS BEFORE DELIVERY</span>
+            <span id="data-status">LOADING DATA</span>
+        </footer>
+    </main>
 </body>
 </html>

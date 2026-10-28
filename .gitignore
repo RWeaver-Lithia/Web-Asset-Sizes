@@ -1,0 +1,3 @@
+dist/
+.wrangler/
+data/seed.sql
